@@ -15,7 +15,7 @@ export default function TimeGutterHeader({ view }: TimeGutterHeaderProps) {
       <div className='h-[64px] border-b border-border bg-slate-50' />
 
       {/* 종일 */}
-      <div className='bg-brand-50/50 flex-1 text-xs font-medium text-muted-foreground flex items-center justify-center'>
+      <div className='flex-1 text-xs font-medium text-muted-foreground flex items-center justify-center'>
         All day
       </div>
     </div>

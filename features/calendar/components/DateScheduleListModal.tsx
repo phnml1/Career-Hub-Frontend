@@ -20,18 +20,30 @@ import {
   CalendarSearchIcon,
   Loader2Icon,
 } from 'lucide-react';
-import EmptyEvent from './EmptyEvent';
+import ScheduleListEmptyState from './ScheduleListEmptyState';
 import { useGetSchedules } from '../hooks/useGetSchedules';
+import { useSearchParamsBasedRoute } from '@/shared/hooks/useSearchParamsBasedRoute';
+import { ResultCriteria, StageType, SubmissionStatus } from '../types';
 
 export default function DateScheduleListModal() {
   const { isOpen, selectedDate, close } = useDateScheduleListStore();
+  const { getSearchParams, getSearchParam } = useSearchParamsBasedRoute();
   const { setViewAndDate } = useCalendarViewStore();
   const { open } = useDateScheduleCreateStore();
   const from = selectedDate
     ? format(startOfDay(selectedDate), 'yyyy-MM-dd')
     : '';
   const to = selectedDate ? format(endOfDay(selectedDate), 'yyyy-MM-dd') : '';
-  const { data, isLoading, isError } = useGetSchedules(from, to);
+  const { data, isLoading, isError } = useGetSchedules({
+    from,
+    to,
+    companyName: getSearchParam('query'),
+    stageTypes: getSearchParams('processTypes') as StageType[],
+    submissionStatusList: getSearchParams(
+      'documentStatuses',
+    ) as SubmissionStatus[],
+    resultCriteria: getSearchParams('resultStatuses') as ResultCriteria[],
+  });
 
   const handleGoToDayView = () => {
     if (!selectedDate) return;
@@ -73,7 +85,9 @@ export default function DateScheduleListModal() {
           )}
 
           {/* 성공 상태 & 데이터 없음 */}
-          {!isLoading && !isError && schedules.length === 0 && <EmptyEvent />}
+          {!isLoading && !isError && schedules.length === 0 && (
+            <ScheduleListEmptyState />
+          )}
 
           {/* 성공 상태 & 데이터 리스트 */}
           {!isLoading && !isError && schedules.length > 0 && (

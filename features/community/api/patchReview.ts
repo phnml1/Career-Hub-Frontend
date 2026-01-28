@@ -1,6 +1,16 @@
 import { clientApi } from '@/shared/lib/api/clientApi';
 import { PostWriteFormValues } from '../schema/post-write-form';
-import { UpdateReviewRequest } from '../types';
+
+export interface UpdateReviewRequest {
+  company: string;
+  position: string;
+  interviewType: string;
+  interviewQuestions: {
+    id?: number;
+    question: string;
+  }[];
+  content: string;
+}
 
 /**
  * 면접 후기 수정 (PATCH /v1/reviews/{reviewId})
@@ -8,7 +18,7 @@ import { UpdateReviewRequest } from '../types';
  */
 export const patchReview = (
   reviewId: number,
-  formData: PostWriteFormValues
+  formData: PostWriteFormValues,
 ) => {
   const requestBody: UpdateReviewRequest = {
     company: formData.companyName,

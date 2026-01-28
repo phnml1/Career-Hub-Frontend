@@ -1,6 +1,6 @@
 import { clientApi } from '@/shared/lib/api/clientApi';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { GetNotificationsResponse } from '../types/notification';
+import { GetNotificationsResponse } from '../types';
 
 export function useDeleteNotification() {
   const queryClient = useQueryClient();

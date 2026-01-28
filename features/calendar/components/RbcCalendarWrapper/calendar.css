@@ -2,167 +2,16 @@
 @reference 'tw-animate-css';
 @reference '../../../../shared/styles/theme.css';
 
-/* 기본 패딩 제거 */
-#calendar-wrapper .rbc-label.rbc-time-header-gutter {
-  padding: 0;
-}
+/* ==========================================================================
+   1. 초기화 및 공통 설정 (Toolbar, Border, Pointer Events)
+   ========================================================================== */
 
-#calendar-wrapper .rbc-toolbar {
+.rbc-toolbar {
   background-color: white;
 }
 
-#calendar-wrapper .rbc-month-header {
-  @apply grid grid-cols-7 bg-slate-50 dark:bg-slate-900 border-b border-border dark:border-slate-800;
-  @apply text-slate-500 dark:text-slate-400;
-}
-
-#calendar-wrapper .rbc-month-header .rbc-header {
-  @apply text-center;
-  @apply border-0;
-}
-
-#calendar-wrapper .rbc-day-bg {
-  @apply border-l border-border;
-  @apply cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800;
-}
-
-#calendar-wrapper .rbc-date-cell {
-  @apply border-slate-100 text-slate-700;
-}
-
-#calendar-wrapper .rbc-today {
-  @apply bg-brand-50/10;
-}
-
-/* 월뷰 캘린더 오늘 날짜 강조 */
-#calendar-wrapper .rbc-month-view .rbc-now button {
-  @apply bg-primary text-primary-foreground w-6 h-6 rounded-full text-sm font-bold;
-}
-
-/* 주간 캘린더 헤더 */
-#calendar-wrapper .rbc-time-header-cell {
-  @apply bg-slate-50 dark:bg-slate-900 min-h-[64px];
-}
-
-#calendar-wrapper .rbc-time-header-cell .rbc-header {
-  @apply py-2;
-}
-
-#calendar-wrapper .rbc-time-header-cell-single-day .rbc-header {
-  @apply p-0;
-}
-
-#calendar-wrapper .rbc-allday-cell .rbc-row-bg {
-  @apply right-0;
-}
-
-#calendar-wrapper .rbc-time-content .rbc-time-gutter {
-  @apply bg-slate-50 dark:bg-slate-900;
-}
-
-#calendar-wrapper .rbc-time-content .rbc-time-gutter .rbc-label {
-  @apply bg-white text-slate-500 font-semibold border border-border rounded;
-}
-
-/* 좌측 gutter 전체 */
-#calendar-wrapper .rbc-time-header-gutter,
-.rbc-time-gutter {
-  width: 64px;
-  min-width: 64px;
-  max-width: 64px;
-  flex-shrink: 0;
-}
-
-/* 좌측 gutter 타임 라벨 중앙 정렬 */
-#calendar-wrapper .rbc-time-gutter .rbc-timeslot-group {
-  @apply h-full items-center justify-center;
-}
-
-/* 좌측 gutter 타임 라벨 */
-#calendar-wrapper .rbc-time-gutter .rbc-label {
-  @apply text-xs p-1;
-}
-
-#calendar-wrapper .rbc-day-slot .rbc-time-slot {
-  @apply border-border;
-}
-
-#calendar-wrapper .rbc-time-gutter .rbc-timeslot-group {
-  @apply border-b-0;
-}
-
-#calendar-wrapper .rbc-timeslot-group {
-  @apply min-h-16;
-}
-
-/* 월간 지난달, 다음달 안보이게 */
-/* 지난달 / 다음달 날짜 완전 제거 */
-#calendar-wrapper .rbc-month-row .rbc-off-range {
-  visibility: hidden;
-  pointer-events: none;
-}
-
-#calendar-wrapper .rbc-month-row .rbc-off-range-bg {
-  background: transparent;
-  pointer-events: none;
-}
-
-/* #calendar-wrapper .rbc-event {
-  @apply p-0 bg-transparent border-none;
-} */
-
-/* #calendar-wrapper .rbc-time-view .rbc-event-label {
-  display: none;
-} */
-
-#calendar-wrapper .rbc-button-link {
-  @apply text-slate-700 font-medium text-[10px] md:text-sm;
-}
-
-/* 일간 캘린더 헤더 */
-#calendar-wrapper .rbc-time-header-cell-single-day {
-  display: block;
-}
-
-/* 월간 뷰 이벤트 카드 디자인 초기화 */
-#calendar-wrapper .rbc-month-view .rbc-event {
-  @apply bg-transparent;
-}
-
-/* 주간/일간 뷰 이벤트 카드 디자인 초기화 */
-#calendar-wrapper .rbc-time-view .rbc-event {
-  @apply bg-transparent p-0 border-none;
-}
-
-.rbc-event-label {
-  display: none !important;
-}
-
-/* 1. 선 스타일 변경 */
-.rbc-current-time-indicator {
-  @apply bg-brand-500;
-  height: 2px !important;
-  z-index: 5 !important;
-}
-
-/* 2. 선 왼쪽에 동그란 점(Point) 추가하기 */
-.rbc-current-time-indicator::before {
-  content: '';
-  position: absolute;
-  top: -4px; /* 선 굵기에 따라 조정 */
-  left: -5px;
-  width: 10px;
-  height: 10px;
-  @apply bg-brand-500;
-  border-radius: 50%;
-}
-
-/* 1. 배경을 가리고 있는 콘텐츠 레이어의 마우스 이벤트를 무시 (투과) */
-.rbc-row-content {
-  pointer-events: none;
-}
-
-.rbc-month-view {
+.rbc-month-view,
+.rbc-time-view {
   @apply border-0;
 }
 
@@ -170,6 +19,178 @@
   @apply border-border;
 }
 
-.rbc-time-view {
-  @apply border-0;
+.rbc-label.rbc-time-header-gutter {
+  padding: 0;
+}
+
+/* 배경 콘텐츠 레이어의 마우스 이벤트 무시 (날짜 칸 클릭을 위해) */
+.rbc-row-content {
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   2. 월간 뷰 스타일 (Month View)
+   ========================================================================== */
+
+.rbc-month-header {
+  @apply grid grid-cols-7 bg-slate-50 dark:bg-slate-900 border-b border-border dark:border-slate-800;
+  @apply text-slate-500 dark:text-slate-400;
+}
+
+.rbc-month-header .rbc-header {
+  @apply text-center border-0;
+}
+
+.rbc-day-bg {
+  @apply border-l border-border cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800;
+}
+
+.rbc-date-cell {
+  @apply border-slate-100 text-slate-700;
+}
+
+.rbc-button-link {
+  @apply text-slate-700 font-medium text-[10px] md:text-sm;
+}
+
+/* 지난달 / 다음달 날짜 숨김 처리 */
+.rbc-month-row .rbc-off-range {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.rbc-month-row .rbc-off-range-bg {
+  background: transparent;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   3. 주간/일간 뷰 및 시간축 (Time View & Gutter)
+   ========================================================================== */
+
+/* 좌측 Gutter (시간축) 너비 고정 */
+.rbc-time-header-gutter,
+.rbc-time-gutter {
+  width: 64px;
+  min-width: 64px;
+  max-width: 64px;
+  flex-shrink: 0;
+}
+
+.rbc-time-content .rbc-time-gutter {
+  @apply bg-slate-50 dark:bg-slate-900;
+}
+
+.rbc-time-content .rbc-time-gutter .rbc-label {
+  @apply bg-white text-slate-500 font-semibold border border-border rounded text-xs p-1;
+}
+
+/* 시간 슬롯 그리드 설정 */
+.rbc-time-gutter .rbc-timeslot-group {
+  @apply h-full items-center justify-center border-b-0;
+}
+
+.rbc-timeslot-group {
+  @apply min-h-16;
+}
+
+.rbc-day-slot .rbc-time-slot {
+  @apply border-border;
+}
+
+/* 시간 뷰 헤더 커스텀 */
+.rbc-time-header-cell {
+  @apply bg-slate-50 dark:bg-slate-900 min-h-[64px];
+}
+
+.rbc-time-header-cell .rbc-header {
+  @apply py-2;
+}
+
+.rbc-time-header-cell-single-day {
+  display: block;
+}
+
+.rbc-time-header-cell-single-day .rbc-header {
+  @apply p-0;
+}
+
+.rbc-allday-cell .rbc-row-bg {
+  @apply right-0;
+}
+
+/* ==========================================================================
+   4. 이벤트 디자인 (Events)
+   ========================================================================== */
+
+/* 이벤트 카드 디자인 초기화 (배경 및 테두리 제거) */
+.rbc-month-view .rbc-event {
+  @apply bg-transparent;
+}
+
+.rbc-time-view .rbc-event {
+  @apply bg-transparent p-0 border-none;
+}
+
+.rbc-event-label {
+  display: none !important;
+}
+
+/* ==========================================================================
+   5. 포인트 UI (오늘, 현재 시간선, 더보기)
+   ========================================================================== */
+
+/* 오늘 날짜 강조 */
+.rbc-today {
+  @apply bg-brand-50/10;
+}
+
+.rbc-month-view .rbc-now button {
+  @apply bg-primary text-primary-foreground w-6 h-6 rounded-full text-sm font-bold;
+}
+
+/* 현재 시간 표시선 (Indicator) */
+.rbc-current-time-indicator {
+  @apply bg-brand-500;
+  height: 2px !important;
+  z-index: 5 !important;
+}
+
+.rbc-current-time-indicator::before {
+  content: '';
+  position: absolute;
+  top: -4px;
+  left: -5px;
+  width: 10px;
+  height: 10px;
+  @apply bg-brand-500;
+  border-radius: 50%;
+}
+
+/* 월간 뷰 이벤트 노출 제한 (3개까지만) */
+.rbc-month-view
+  .rbc-month-row
+  .rbc-row-content
+  .rbc-row:nth-child(n + 5):not(:has(.rbc-show-more)) {
+  display: none !important;
+}
+
+/* 더보기(+n개) 버튼 스타일 */
+.rbc-show-more {
+  @apply flex items-center justify-center py-1 px-1.5 mt-1 
+         bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 
+         rounded-lg text-[8px] font-black uppercase tracking-tighter 
+         transition-all border border-slate-200 dark:border-slate-700 border-dashed;
+  width: calc(100% - 8px) !important;
+  margin: 4px auto 0 !important;
+  background-color: transparent !important;
+  font-size: 8px !important;
+}
+
+.rbc-time-view .rbc-row {
+  min-height: 64px;
+}
+
+.rbc-time-content {
+  background-color: white;
 }

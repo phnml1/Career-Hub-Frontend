@@ -1,6 +1,13 @@
 import { clientApi } from '@/shared/lib/api/clientApi';
 import { PostWriteFormValues } from '../schema/post-write-form';
-import { PostReviewRequest } from '../types';
+
+export interface PostReviewRequest {
+  company: string;
+  position: string;
+  interviewType: string;
+  interviewQuestions: string[]; // 등록 시 string 배열
+  content: string;
+}
 
 /**
  * 면접 후기 등록 (POST /v1/reviews)

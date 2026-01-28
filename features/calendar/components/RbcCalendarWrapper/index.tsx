@@ -12,7 +12,6 @@ import { Toolbar } from './Toolbar';
 import { useDateScheduleListStore } from '../../stores/useDateScheduleListStore';
 import { WeekViewHeader } from './WeekViewHeader';
 import TimeGutterHeader from './TimeGutterHeader';
-import { mapCalendarEventsToRbcEvents } from '../../utils/mapCalendarEventsToRbcEvents';
 import { useCalendarViewStore } from '../../stores/useCalendarViewStore';
 import DayViewHeader from './DayViewHeader';
 import MonthViewEvent from './MonthViewEvent';
@@ -20,7 +19,7 @@ import WeekViewEvent from './WeekViewEvent';
 import { MonthViewDateHeader } from './MonthViewDateHeader';
 import DateCellWrapper from './DateCellWrapper';
 import { MonthViewHeader } from './MonthViewHeader';
-import { ScheduleItem } from '../../types';
+import { RbcEvent } from '../../types/rbcEvent';
 
 const locales = {
   ko: ko,
@@ -34,7 +33,7 @@ const formats = {
   timeGutterFormat: (
     date: Date,
     culture?: string,
-    localizer?: DateLocalizer
+    localizer?: DateLocalizer,
   ) => {
     return localizer!.format(date, 'a h', 'en-US');
   },
@@ -49,64 +48,60 @@ const localizer = dateFnsLocalizer({
 });
 
 export default function RbcCalendarWrapper({
-  events,
+  events = [],
 }: {
-  events: ScheduleItem[];
+  events: RbcEvent[];
 }) {
   const { view, date, setView, setDate } = useCalendarViewStore();
 
   const openListModal = useDateScheduleListStore((state) => state.open);
 
-  const rbcEvents = mapCalendarEventsToRbcEvents(events);
-
   return (
-    <div id='calendar-wrapper' className='h-full flex-1'>
-      <Calendar
-        view={view}
-        views={{
-          month: true,
-          week: true,
-          day: true,
-        }}
-        date={date}
-        onView={(nextView) => setView(nextView)}
-        onNavigate={(nextDate) => setDate(nextDate)}
-        components={{
-          toolbar: Toolbar,
-          dateCellWrapper: DateCellWrapper,
-          month: {
-            event: MonthViewEvent,
-            dateHeader: MonthViewDateHeader,
-            header: MonthViewHeader,
-          },
-          week: {
-            header: WeekViewHeader,
-            event: WeekViewEvent,
-          },
-          day: {
-            header: DayViewHeader,
-            event: WeekViewEvent,
-          },
-          timeGutterHeader: TimeGutterHeader,
-        }}
-        selectable
-        onSelectSlot={(slotInfo) => {
-          if (view === 'month') {
-            openListModal(slotInfo.start);
-          }
-        }}
-        onSelectEvent={(rbcEvent) => {
-          if (view === 'month') {
-            openListModal(rbcEvent.start);
-          }
-        }}
-        culture='ko'
-        formats={formats}
-        localizer={localizer}
-        startAccessor='start'
-        endAccessor='end'
-        events={rbcEvents}
-      />
-    </div>
+    <Calendar
+      className='h-full w-full'
+      view={view}
+      views={{
+        month: true,
+        week: true,
+        day: true,
+      }}
+      messages={{
+        showMore: (total: number) => `+ ${total}개 더보기`,
+      }}
+      date={date}
+      onView={(nextView) => setView(nextView)}
+      onNavigate={(nextDate) => setDate(nextDate)}
+      components={{
+        toolbar: Toolbar,
+        dateCellWrapper: DateCellWrapper,
+        month: {
+          event: (props) => <MonthViewEvent {...props} />,
+          dateHeader: MonthViewDateHeader,
+          header: MonthViewHeader,
+        },
+        week: {
+          header: WeekViewHeader,
+          event: WeekViewEvent,
+        },
+        day: {
+          header: DayViewHeader,
+          event: WeekViewEvent,
+        },
+        timeGutterHeader: TimeGutterHeader,
+      }}
+      selectable
+      onSelectSlot={(slotInfo) => {
+        openListModal(slotInfo.start);
+      }}
+      onSelectEvent={(rbcEvent) => {
+        openListModal(rbcEvent.start);
+      }}
+      culture='ko'
+      formats={formats}
+      localizer={localizer}
+      startAccessor='start'
+      endAccessor='end'
+      events={events}
+    />
   );
 }

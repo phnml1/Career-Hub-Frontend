@@ -1,4 +1,3 @@
-// app/community/@modal/(.)post/[id]/error.tsx
 'use client';
 
 import { useEffect } from 'react';

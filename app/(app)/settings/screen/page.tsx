@@ -22,7 +22,6 @@ const THEME_ICONS = {
 export default function ScreenSettingsPage() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
-  console.log('🚀 ~ ScreenSettingsPage ~ theme:', theme);
 
   // Hydration mismatch 방지:
   // 서버와 클라이언트의 테마 정보가 다를 수 있으므로 마운트된 후에만 렌더링
@@ -65,13 +64,13 @@ export default function ScreenSettingsPage() {
                     'group relative p-4 rounded-2xl border-2 transition-all duration-200 flex items-center space-x-4 text-left',
                     isActive
                       ? themeOption.activeClass
-                      : 'border-slate-200 dark:border-slate-700 hover:border-brand-200 dark:hover:border-slate-600'
+                      : 'border-slate-200 dark:border-slate-700 hover:border-brand-200 dark:hover:border-slate-600',
                   )}
                 >
                   <div
                     className={cn(
                       'w-12 h-12 rounded-full flex items-center justify-center transition-colors',
-                      themeOption.iconClass
+                      themeOption.iconClass,
                     )}
                   >
                     <Icon className='w-6 h-6' />
@@ -82,7 +81,7 @@ export default function ScreenSettingsPage() {
                         'font-bold',
                         isActive
                           ? themeOption.textClass
-                          : 'text-slate-900 dark:text-slate-100'
+                          : 'text-slate-900 dark:text-slate-100',
                       )}
                     >
                       {themeOption.title}

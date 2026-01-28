@@ -1,37 +1,38 @@
 'use client';
 
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recharts';
-import { useGetApplicationsStats } from '../hooks/useGetApplicationsStats';
-import { designTokens } from '@/shared/constants/designTokens';
 import { PieChartIcon } from 'lucide-react';
 
-export const StatusPieChart = () => {
-  const { data } = useGetApplicationsStats();
+import { designTokens } from '@/shared/constants/designTokens';
+import { useGetApplicationStatistics } from '../hooks/useGetApplicationStatistics';
+
+export default function StatusPieChart() {
+  const { data } = useGetApplicationStatistics();
 
   const chartData = [
     {
       name: '서류 전형',
-      value: data?.docStageCount,
+      value: data.docStageCount,
       color: designTokens.colors.status.info,
     },
     {
       name: '기타 전형',
-      value: data?.etcStageCount,
+      value: data.etcStageCount,
       color: designTokens.colors.status.secondary,
     },
     {
       name: '면접 전형',
-      value: data?.interviewStageCount,
+      value: data.interviewStageCount,
       color: designTokens.colors.status.warning,
     },
     {
       name: '최종 합격',
-      value: data?.finalPassedCount,
+      value: data.finalPassedCount,
       color: designTokens.colors.status.success,
     },
     {
       name: '최종 불합격',
-      value: data?.finalFailedCount,
+      value: data.finalFailedCount,
       color: designTokens.colors.status.error,
     },
   ];
@@ -85,4 +86,4 @@ export const StatusPieChart = () => {
       </div>
     </div>
   );
-};
+}

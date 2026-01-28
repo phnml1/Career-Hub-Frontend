@@ -3,7 +3,7 @@
 import { Button } from '@/shared/components/ui/button';
 import { ButtonGroup } from '@/shared/components/ui/button-group';
 import { designTokens } from '@/shared/constants/designTokens';
-import { ChartColumnIcon } from 'lucide-react';
+import { ChartColumnIcon, TrendingUpIcon } from 'lucide-react';
 import { useState } from 'react';
 import {
   BarChart,
@@ -35,12 +35,16 @@ interface CustomTooltipProps extends TooltipProps<number, string> {
   payload?: PayloadItem[];
 }
 
-export const ActivityChart = () => {
+export default function ActivityChart() {
   const [chartView, setChartView] = useState<'WEEKLY' | 'MONTHLY'>('WEEKLY');
 
-  const { data, isLoading } = useGetApplicationCreationStatistics();
+  const { data } = useGetApplicationCreationStatistics();
 
   const activeData: ChartDataItem[] = data ? data[chartView] : [];
+
+  const currentCount =
+    activeData.find((item) => item.isCurrent)?.applicationsCount ?? 0;
+  const periodLabel = chartView === 'WEEKLY' ? '주' : '달';
 
   return (
     <div className='bg-white dark:bg-slate-900 p-8 rounded-3xl border border-border'>
@@ -72,14 +76,7 @@ export const ActivityChart = () => {
           ))}
         </ButtonGroup>
       </div>
-
       <div className='h-64 relative'>
-        {isLoading && (
-          <div className='w-100 h-100 flex items-center justify-center text-slate-400 text-sm'>
-            차트 데이터를 불러오는 중...
-          </div>
-        )}
-
         <ResponsiveContainer width='100%' height='100%'>
           <BarChart
             data={activeData}
@@ -133,9 +130,23 @@ export const ActivityChart = () => {
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      <div className='mt-6 flex items-center justify-center text-sm text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-800/50 p-4 rounded-2xl border border-slate-100 dark:border-slate-800 animate-in fade-in slide-in-from-bottom-2 duration-500'>
+        <TrendingUpIcon
+          className='w-4 h-4 mr-2 text-brand-500'
+          aria-hidden='true'
+        />
+        <span>
+          이번 {periodLabel}는{' '}
+          <span className='font-bold text-slate-900 dark:text-slate-100'>
+            {currentCount}건
+          </span>
+          의 지원 카드를 만들었어요.
+        </span>
+      </div>
     </div>
   );
-};
+}
 
 const CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
   if (active && payload && payload.length > 0) {

@@ -3,6 +3,8 @@
 import { usePathname } from 'next/navigation';
 import { SidebarNavItem } from './SidebarNavItem';
 import { MENU_GROUPS } from '../../constants';
+import { useGetNotifications } from '@/features/notifications/hooks/useGetNotifications';
+import { useMemo } from 'react';
 
 interface SidebarNavProps {
   isExpanded: boolean;
@@ -10,6 +12,14 @@ interface SidebarNavProps {
 
 export function SidebarNav({ isExpanded }: SidebarNavProps) {
   const pathname = usePathname();
+  const { data: notificationsData } = useGetNotifications();
+
+  const unreadCount = useMemo(() => {
+    if (!notificationsData?.pages) return 0;
+    return notificationsData.pages
+      .flatMap((page) => page.notifications)
+      .filter((notification) => !notification.is_read).length;
+  }, [notificationsData]);
 
   return (
     <div className='flex-1 overflow-y-auto space-y-6 scrollbar-hide'>
@@ -25,6 +35,7 @@ export function SidebarNav({ isExpanded }: SidebarNavProps) {
               <SidebarNavItem
                 key={item.href}
                 {...item}
+                count={item.href === '/notifications' ? unreadCount : undefined}
                 isActive={pathname === item.href}
                 isExpanded={isExpanded}
               />

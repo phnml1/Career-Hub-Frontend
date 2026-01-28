@@ -16,7 +16,7 @@ interface PostListItemMenuProps {
   onReport?: () => void;
 }
 
-export function PostListItemMenu({
+export default function PostListItemMenu({
   isMyPost,
   onEdit,
   onDelete,

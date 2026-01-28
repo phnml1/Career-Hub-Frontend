@@ -1,9 +1,9 @@
-import { ENV } from '@/shared/constants/env';
-import { http, HttpResponse } from 'msw';
 import {
   PostReviewRequest,
   UpdateReviewRequest,
-} from '@/features/community/types';
+} from '@/features/community/api';
+import { ENV } from '@/shared/constants/env';
+import { http, HttpResponse } from 'msw';
 
 // 초기 Mock 데이터 생성 및 상태 관리
 let ALL_REVIEWS = Array.from({ length: 55 }, (_, i) => ({
@@ -29,6 +29,15 @@ export const communityHandlers = [
     const lastReviewId = url.searchParams.get('lastReviewId');
     const size = parseInt(url.searchParams.get('size') || '20');
 
+    // 🚀 [에러 테스트용 로직 추가]
+    // 검색창에 'error'라고 입력하면 즉시 500 에러를 던집니다.
+    if (query === 'error') {
+      return new HttpResponse(null, {
+        status: 500,
+        statusText: 'Internal Server Error (MSW Test)',
+      });
+    }
+
     // [필터링] 회사명, 포지션, 면접유형 검색
     let processed = [...ALL_REVIEWS];
     if (query) {
@@ -36,7 +45,7 @@ export const communityHandlers = [
         (r) =>
           r.company.includes(query) ||
           r.position.includes(query) ||
-          r.interviewType.includes(query)
+          r.interviewType.includes(query),
       );
     }
 
@@ -128,7 +137,7 @@ export const communityHandlers = [
 
       if (!isFound) return new HttpResponse(null, { status: 404 });
       return HttpResponse.json(null, { status: 204 });
-    }
+    },
   ),
 
   // 면접 후기 삭제 (DELETE)
@@ -137,13 +146,13 @@ export const communityHandlers = [
     const targetId = Number(reviewId);
 
     const existIndex = ALL_REVIEWS.findIndex(
-      (r) => Number(r.reviewId) === targetId
+      (r) => Number(r.reviewId) === targetId,
     );
 
     if (existIndex === -1) {
       return HttpResponse.json(
         { message: '리뷰를 찾을 수 없습니다.', statusCode: 404 },
-        { status: 404 }
+        { status: 404 },
       );
     }
 

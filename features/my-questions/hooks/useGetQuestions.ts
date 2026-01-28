@@ -1,0 +1,39 @@
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
+
+import { getQuestions } from '../api/getQuestions';
+import { GetQuestionsResponse } from '../types';
+
+interface UseGetQuestionsProps {
+  linkStatus: 'LINKED' | 'UNLINKED';
+  query?: string;
+  size?: number;
+}
+
+export const useGetQuestions = ({
+  linkStatus,
+  query,
+  size = 20,
+}: UseGetQuestionsProps) => {
+  return useSuspenseInfiniteQuery<GetQuestionsResponse>({
+    // queryKey에 linkStatus와 query를 포함하여 필터가 바뀔 때마다 새 데이터를 가져옵니다.
+    queryKey: ['questions', linkStatus, query],
+
+    queryFn: ({ pageParam }) =>
+      getQuestions({
+        linkStatus,
+        query,
+        size,
+        lastCursorId: pageParam as number | undefined,
+      }),
+
+    initialPageParam: undefined,
+
+    // 다음 페이지 커서 설정 (명세서의 nextCursorId 활용)
+    getNextPageParam: (lastPage) => {
+      return lastPage.hasNext ? lastPage.nextCursorId : undefined;
+    },
+
+    // 탭 전환 시 로딩 표시를 위해 지연 방지
+    staleTime: 1000 * 60, // 1분 동안은 캐시 유지
+  });
+};

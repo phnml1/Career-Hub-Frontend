@@ -1,6 +1,6 @@
 import { QuestionItemSkeleton } from './QuestionItemSkeleton';
 
-export const QuestionListSkeleton = () => {
+export default function QuestionListSkeleton() {
   return (
     <div className='space-y-4 w-full'>
       {/* 5개의 스켈레톤 아이템을 생성 */}
@@ -9,4 +9,4 @@ export const QuestionListSkeleton = () => {
       ))}
     </div>
   );
-};
+}

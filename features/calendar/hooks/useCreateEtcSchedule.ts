@@ -5,7 +5,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 /** 기타 일정 생성 요청 타입 */
 interface CreateEtcRequest {
-  applicationId: string;
+  applicationId: number;
   scheduleName: string; // 직접 입력한 일정 명칭
   startedAt: string; // ISO String
   endedAt: string; // ISO String

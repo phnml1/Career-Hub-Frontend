@@ -1,7 +1,7 @@
 import { dehydrate, HydrationBoundary } from '@tanstack/react-query';
 
 import { getReviewDetail } from '@/features/community/api/getReviewDetail';
-import PostDetailModal from '@/features/community/components/PostDetailModal';
+import PostDetailModal from '@/features/community/components/PostDetail/PostDetailModal';
 import { getQueryClient } from '@/shared/lib/tanstack-query/get-query-client';
 
 export default async function CommunityDetailPage({

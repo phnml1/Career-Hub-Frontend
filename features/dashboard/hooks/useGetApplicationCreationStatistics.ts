@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useSuspenseQuery } from '@tanstack/react-query';
 import { clientApi } from '@/shared/lib/api/clientApi';
 import {
   ApplicationCreationStatisticsResponse,
@@ -6,13 +6,13 @@ import {
 } from '../types/api';
 
 export const useGetApplicationCreationStatistics = (
-  params?: GetApplicationStatisticsParams
+  params?: GetApplicationStatisticsParams,
 ) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['applications', 'statistics', 'creation', params],
     queryFn: async () => {
       return clientApi.get<ApplicationCreationStatisticsResponse>(
-        `/v1/applications/statistics/creation?${params}`
+        `/v1/applications/statistics/creation?${params}`,
       );
     },
     // Recharts용 데이터 포맷으로 변환

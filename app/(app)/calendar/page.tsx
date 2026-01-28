@@ -1,21 +1,29 @@
+import { Suspense } from 'react';
+
 import CalendarContainer from '@/features/calendar/components/CalendarContainer';
-import CalendarFilterPanelWrapper from '@/features/calendar/components/CalendarFilterPanelWrapper';
-import DateScheduleCreateModal from '@/features/calendar/components/DateScheduleCreateModal';
+import CalendarFilterPanelWrapper from '@/features/calendar/components/FilterPanel/CalendarFilterPanelWrapper';
+import CalendarLoader from '@/features/calendar/components/CalendarLoader';
+import DateScheduleCreateModal from '@/features/calendar/components/ScheduleCreateModal';
 import DateScheduleListModal from '@/features/calendar/components/DateScheduleListModal';
 
 export default function CalendarPage() {
   return (
-    <div className='flex h-full w-full relative'>
-      <main className='flex-1 h-full'>
-        <CalendarContainer />
-      </main>
+    <>
+      {/* 1. h-screen: 전체 높이를 화면에 고정 */}
+      {/* 2. w-full & overflow-hidden: 브라우저 너비를 넘지 못하게 가두기 */}
+      <div className='flex h-screen md:w-[calc(100vw-16rem)] overflow-hidden'>
+        {/* 3. min-w-0: flex 자식이 자신의 최소 너비를 무시하고 압축되도록 허용 */}
+        <div className='flex-1 h-full min-w-0'>
+          <Suspense fallback={<CalendarLoader />}>
+            <CalendarContainer />
+          </Suspense>
+        </div>
 
-      {/* 필터 영역: 상태에 따라 보여야 하므로 클라이언트 래퍼로 분리 */}
-      <CalendarFilterPanelWrapper />
+        <CalendarFilterPanelWrapper />
+      </div>
 
-      {/* 전역 레이어: 클라이언트 전용 모달들 */}
       <DateScheduleListModal />
       <DateScheduleCreateModal />
-    </div>
+    </>
   );
 }

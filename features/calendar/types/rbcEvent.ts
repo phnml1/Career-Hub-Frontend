@@ -1,4 +1,4 @@
-import { ScheduleItem } from '.';
+import { ScheduleItem } from '../api/getSchedules';
 
 // react-big-calendar 캘린더 이벤트 타입
 export type RbcEvent = {

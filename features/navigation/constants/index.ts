@@ -27,7 +27,7 @@ export const MENU_GROUPS = [
   {
     group: '시스템',
     items: [
-      { name: '알림 센터', href: '/notifications', icon: BellIcon, count: 2 },
+      { name: '알림 센터', href: '/notifications', icon: BellIcon },
       { name: '계정 설정', href: '/settings', icon: SettingsIcon },
     ],
   },

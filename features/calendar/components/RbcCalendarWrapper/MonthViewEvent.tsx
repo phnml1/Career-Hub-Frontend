@@ -7,17 +7,9 @@ export default function MonthViewEvent({ event }: { event: RbcEvent }) {
 
   return (
     <>
-      <div
-        className={cn(
-          'h-full px-2 py-0.5 rounded border hover:scale-[1.03] transition-all',
-          styles
-        )}
-      >
+      <div className={cn('h-full p-1 rounded border', styles)}>
         <div className='flex items-center gap-1'>
-          <span className='text-no-wrap text-xs font-bold'>
-            {event.resource.companyName}
-          </span>
-          |<span className='text-xs truncate'>{event.title}</span>
+          <span className='text-no-wrap text-xs font-bold'>{event.title}</span>
         </div>
       </div>
     </>

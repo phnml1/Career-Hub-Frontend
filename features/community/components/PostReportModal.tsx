@@ -32,7 +32,7 @@ const REPORT_REASONS = [
   { id: 'ETC', label: '기타' },
 ];
 
-export function PostReportModal({
+export default function PostReportModal({
   isOpen,
   onClose,
   postId,
@@ -71,7 +71,7 @@ export function PostReportModal({
           reset(); // 폼 초기화
           onClose(); // 모달 닫기
         },
-      }
+      },
     );
   };
 

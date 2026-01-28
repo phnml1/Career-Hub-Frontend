@@ -1,18 +1,18 @@
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query';
 
 import { getReviews } from '../api/getReviews';
-import { ReviewListResponse } from '../types';
+import { ReviewListResponse, SortOrder } from '../types';
 
 interface UseGetReviewsParams {
   query?: string;
-  sort: 'NEWEST' | 'OLDEST';
+  sort: SortOrder;
 }
 
 /**
  * 면접 후기 목록을 무한 스크롤로 가져오는 커스텀 훅
  */
 export const useGetReviews = ({ query, sort }: UseGetReviewsParams) => {
-  return useInfiniteQuery({
+  return useSuspenseInfiniteQuery({
     /**
      * queryKey: 검색어와 정렬 조건이 바뀔 때마다
      * 새로운 캐시 컨텍스트를 생성합니다.

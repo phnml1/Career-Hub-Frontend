@@ -1,6 +1,6 @@
 import { clientApi } from '@/shared/lib/api/clientApi';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { GetNotificationsParams, GetNotificationsResponse } from '../types/notification';
+import { GetNotificationsParams, GetNotificationsResponse } from '../types';
 
 export function useGetNotifications(size: number = 20) {
   return useInfiniteQuery({

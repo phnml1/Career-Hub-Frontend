@@ -11,15 +11,16 @@ import Link from 'next/link';
  * @param param0
  * @returns
  */
-export const UpcomingSchedules = () => {
+export default function UpcomingSchedules() {
   const { data } = useGetUpcomingSchedules();
-
-  const hasSchedules = !!data?.data.length;
+  const schedules = data.schedules;
+  const hasSchedules = schedules.length > 0;
 
   const handleClickMoreShowButton = () => {};
 
   return (
     <div className='bg-white dark:bg-slate-900 p-8 rounded-3xl border border-border'>
+      {/* 헤더: 제목 및 더보기 버튼 */}
       <div className='flex items-center justify-between mb-6'>
         <div className='text-lg font-bold flex items-center gap-2'>
           <CalendarIcon className='stroke-2 w-5 h-5 text-brand-500' />
@@ -35,10 +36,11 @@ export const UpcomingSchedules = () => {
         </Button>
       </div>
 
+      {/* 바디: 리스트 또는 Empty State */}
       <div className='flex flex-col gap-y-2'>
         {/* 데이터가 있을 때만 map 실행 */}
         {hasSchedules &&
-          data.data.map((schedule) => (
+          data.schedules.map((schedule) => (
             <Link
               key={schedule.id}
               href={`/applications/${schedule.applicationId}`}
@@ -56,4 +58,4 @@ export const UpcomingSchedules = () => {
       </div>
     </div>
   );
-};
+}

@@ -1,8 +1,8 @@
 'use client';
 
-import { NOTIFICATION_SECTIONS } from '@/features/settings/notifications/constants';
-import { useGetNotificationPreferences } from '@/features/settings/notifications/hooks/useGetNotificationPreferences';
-import { useUpdateNotificationPreference } from '@/features/settings/notifications/hooks/useUpdateNotificationPreference';
+import { NOTIFICATION_SECTIONS } from '@/features/notifications/constants';
+import { useGetNotificationPreferences } from '@/features/notifications/hooks/useGetNotificationPreferences';
+import { useUpdateNotificationPreference } from '@/features/notifications/hooks/useUpdateNotificationPreference';
 import {
   Card,
   CardContent,

@@ -29,3 +29,7 @@ export interface ApplicationStats {
    */
   finalFailedCount: number;
 }
+
+export type StageType = 'DOCUMENT' | 'ETC' | 'INTERVIEW' | 'APPLICATION_CLOSE';
+
+export type ScheduleResult = 'WAITING' | 'PASS' | 'FAIL';

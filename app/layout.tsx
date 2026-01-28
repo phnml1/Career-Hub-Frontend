@@ -15,7 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko' className='scroll-smooth' suppressHydrationWarning>
-      <body className='antialiased min-h-screen overflow-y-auto'>
+      <body className='antialiased min-h-screen overflow-y-auto overflow-x-hidden'>
         <Providers>{children}</Providers>
       </body>
     </html>

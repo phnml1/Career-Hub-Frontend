@@ -2,18 +2,15 @@
 
 import { BookMarkedIcon, PlusIcon } from 'lucide-react';
 import { useQuestionModalStore } from '../store/useQuestionModalStore';
+import { Button } from '@/shared/components/ui/button';
 
 export default function MyQuestionsHeader() {
   const openCreateModal = useQuestionModalStore(
-    (state) => state.openCreateModal
+    (state) => state.openCreateModal,
   );
 
-  const handleClickAddQuestionButton = () => {
-    openCreateModal();
-  };
-
   return (
-    <div className='flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4'>
+    <header className='flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4'>
       <div>
         <h1 className='text-2xl font-bold text-slate-900 dark:text-slate-100 flex items-center'>
           <BookMarkedIcon className='w-6 h-6 mr-2 text-brand-500' />
@@ -23,13 +20,10 @@ export default function MyQuestionsHeader() {
           커뮤니티에서 저장한 면접 질문들을 복습해보세요.
         </p>
       </div>
-      <button
-        onClick={handleClickAddQuestionButton}
-        className='px-4 py-2.5 bg-brand-500 text-white rounded-xl font-bold hover:bg-brand-600 flex items-center space-x-2 transition-all shadow-lg'
-      >
+      <Button variant='default' onClick={openCreateModal} size='lg'>
         <PlusIcon className='w-5 h-5' />
-        <span>질문 추가</span>
-      </button>
-    </div>
+        <span>면접 질문 추가 하기</span>
+      </Button>
+    </header>
   );
 }

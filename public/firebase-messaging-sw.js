@@ -21,20 +21,30 @@ firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
 // 백그라운드 메시지 수신 처리
-messaging.onBackgroundMessage((payload) => {
+messaging.onBackgroundMessage(async (payload) => {
   console.log('[firebase-messaging-sw.js] 백그라운드 메시지 수신:', payload);
 
-  const { data } = payload;
-  const notificationTitle = data?.title || '새 알림';
-  const notificationOptions = {
-    body: data?.body || '',
-    icon: '/icon-192x192.png',
-    badge: '/badge-72x72.png',
-    tag: data?.tag || 'default',
-    data: data,
-  };
+  try {
+    // notification 필드 또는 data 필드에서 정보 추출
+    const notification = payload.notification || {};
+    const data = payload.data || {};
 
-  self.registration.showNotification(notificationTitle, notificationOptions);
+    const notificationTitle = notification.title || data.title || '새 알림';
+    const notificationOptions = {
+      body: notification.body || data.body || '',
+      icon: '/icon-192x192.png',
+      tag: data.tag || 'default',
+      data: data,
+    };
+
+    console.log('[firebase-messaging-sw.js] 알림 표시 시도:', notificationTitle, notificationOptions);
+    console.log('[firebase-messaging-sw.js] self.registration:', self.registration);
+
+    const result = await self.registration.showNotification(notificationTitle, notificationOptions);
+    console.log('[firebase-messaging-sw.js] 알림 표시 성공:', result);
+  } catch (error) {
+    console.error('[firebase-messaging-sw.js] 알림 표시 에러:', error);
+  }
 });
 
 // 알림 클릭 이벤트 처리

@@ -1,8 +1,3 @@
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from '@/shared/components/ui/avatar';
 import { Button } from '@/shared/components/ui/button';
 import { EllipsisIcon, LogOutIcon } from 'lucide-react';
 import { useGetMyProfile } from '../../../my-profile/hooks/useGetMyProfile';
@@ -15,6 +10,8 @@ import {
   DropdownMenuTrigger,
 } from '@/shared/components/ui/dropdown-menu';
 import { cn } from '@/shared/lib/utils';
+import { MyProfileImage } from '@/features/my-profile/components/MyProfileImage';
+import { useConfirmStore } from '@/shared/stores/useConfirmStore';
 
 interface SidebarProfileDropdownMenuProps {
   isExpanded: boolean;
@@ -24,15 +21,24 @@ export const SidebarProfileDropdownMenu = ({
   isExpanded,
 }: SidebarProfileDropdownMenuProps) => {
   const { data } = useGetMyProfile();
+  const { openConfirm } = useConfirmStore();
+
+  const handleLogout = () => {
+    openConfirm({
+      title: '로그아웃',
+      description: '로그아웃 하시겠습니까?',
+      confirmText: '로그아웃',
+      onConfirm: () => {
+        // TODO 로그아웃 mutate
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' className='w-full p-2 flex h-auto gap-3'>
-          <Avatar className='size-9 shrink-0'>
-            <AvatarImage src='https://github.com/maxleiter.png' />
-            <AvatarFallback>{data?.nickname?.[0] || 'U'}</AvatarFallback>
-          </Avatar>
+          <MyProfileImage />
 
           {isExpanded && (
             <>
@@ -46,20 +52,24 @@ export const SidebarProfileDropdownMenu = ({
           )}
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className='ml-4 w-52'>
+      <DropdownMenuContent className={cn('w-52', !isExpanded && 'ml-2')}>
         {!isExpanded && (
           <>
             <DropdownMenuLabel>
-              <p>{data?.nickname}</p>님 안녕하세요.
+              <span className='text-brand-500 font-semibold'>
+                {data?.nickname}
+              </span>
+              님 안녕하세요.
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
           </>
         )}
 
         <DropdownMenuItem
+          onClick={handleLogout}
           className={cn(
             'cursor-pointer px-4 py-2.5 text-sm text-red-500 font-medium',
-            'hover:bg-red-50 transition-colors focus:bg-red-50 focus:text-red-500'
+            'hover:bg-red-50 transition-colors focus:bg-red-50 focus:text-red-500',
           )}
         >
           <LogOutIcon className='w-4 h-4 text-red-500' />

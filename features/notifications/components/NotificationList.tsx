@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import NotificationItem from './NotificationItem';
-import { Notification } from '../types/notification';
+import { Notification } from '../types';
 
 interface NotificationListProps {
   notifications: Notification[];

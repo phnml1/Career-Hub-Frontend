@@ -1,17 +1,25 @@
 'use client';
 
-import { useInView } from '@/shared/hooks/useInView';
-import { useQuestions } from '../hooks/useQuestions';
-import EmptyQuestion from './EmptyQuestion';
-import { QuestionItem } from './QuestionItem';
 import { useEffect } from 'react';
 import { Loader2Icon } from 'lucide-react';
-import { QuestionListSkeleton } from './QuestionListSkeleton';
+
+import { useInView } from '@/shared/hooks/useInView';
+import { useGetQuestions } from '../hooks/useGetQuestions';
+
+import LinkedQuestionItem from './LinkedQuestionItem';
+import UnlinkedQuestionItem from './UnlinkedQuestionItem';
+import QuestionListEmptyState from './QuestionListEmptyState';
+import { useSearchParamsBasedRoute } from '@/shared/hooks/useSearchParamsBasedRoute';
 
 export default function QuestionList() {
-  const {
-    query: { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading },
-  } = useQuestions();
+  const { getSearchParam, updateRoute } = useSearchParamsBasedRoute();
+
+  const query = getSearchParam('query');
+  const currentTab = getSearchParam('type', 'linked');
+  const linkStatus = currentTab.toUpperCase() as 'LINKED' | 'UNLINKED';
+
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useGetQuestions({ linkStatus, query });
 
   const { ref, inView } = useInView({
     threshold: 0.1,
@@ -24,22 +32,32 @@ export default function QuestionList() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  // 첫 로딩 시 스켈레톤 표시
-  if (isLoading) {
-    return <QuestionListSkeleton />;
-  }
+  const questions = data?.pages.flatMap((page) => page.contents) || [];
 
-  // 데이터가 비어있을 때 (data가 undefined일 수 있으므로 옵셔널 체이닝 확인)
-  const questions = data?.questions || [];
   if (questions.length === 0) {
-    return <EmptyQuestion />;
+    return (
+      <QuestionListEmptyState
+        query={query}
+        onReset={() => updateRoute({ query: null })}
+      />
+    );
   }
 
   return (
     <div className='space-y-4'>
-      {questions.map((question) => (
-        <QuestionItem key={question.id} question={question} />
-      ))}
+      {questions.map((question) =>
+        linkStatus === 'LINKED' ? (
+          <LinkedQuestionItem
+            key={question.questionArchiveId}
+            question={question}
+          />
+        ) : (
+          <UnlinkedQuestionItem
+            key={question.questionArchiveId}
+            question={question}
+          />
+        ),
+      )}
 
       {/* 무한 스크롤 트리거 요소 */}
       {hasNextPage && (

@@ -6,8 +6,8 @@ import { useRouter } from 'next/navigation';
 
 import { RelativeTime } from '@/shared/components/RelativeTime';
 import { useConfirmStore } from '@/shared/stores/useConfirmStore';
-import { PostListItemMenu } from './PostListItemMenu';
-import { PostReportModal } from '../PostReportModal';
+import PostListItemMenu from './PostListItemMenu';
+import PostReportModal from '../PostReportModal';
 import { PostListItem as PostListItemType } from '../../types';
 import { useDeleteReview } from '../../hooks/useDeleteReview';
 
@@ -45,7 +45,7 @@ export default function PostListItem({ post }: { post: PostListItemType }) {
           },
           onError: (error) => {
             alert(
-              error instanceof Error ? error.message : '삭제에 실패했습니다.'
+              error instanceof Error ? error.message : '삭제에 실패했습니다.',
             );
           },
         });

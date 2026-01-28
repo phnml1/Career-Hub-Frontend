@@ -1,13 +1,28 @@
+'use client';
+
 import {
   BookMarkedIcon,
   BriefcaseIcon,
   CalendarIcon,
   LayoutDashboardIcon,
   UsersIcon,
+  LucideIcon,
 } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { cn } from '@/shared/lib/utils';
+
+const NAV_ITEMS: { href: string; label: string; icon: LucideIcon }[] = [
+  { href: '/dashboard', label: '대시보드', icon: LayoutDashboardIcon },
+  { href: '/applications', label: '지원 현황', icon: BriefcaseIcon },
+  { href: '/calendar', label: '캘린더', icon: CalendarIcon },
+  { href: '/questions', label: '면접 질문', icon: BookMarkedIcon },
+  { href: '/community', label: '커뮤니티', icon: UsersIcon },
+];
 
 export default function MobileNav() {
+  const pathname = usePathname();
+
   return (
     <div className='h-[60px] md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 z-30 pb-safe transition-colors'>
       <div className='flex justify-between items-center px-2'>
@@ -33,7 +48,7 @@ export default function MobileNav() {
           <span className='text-[10px] font-medium'>캘린더</span>
         </Link>
         <Link
-          href='/interviews'
+          href='/questions'
           className='flex flex-col items-center justify-center p-2 flex-1 space-y-1 text-slate-400 dark:text-slate-500'
         >
           <BookMarkedIcon className='w-6 h-6' />

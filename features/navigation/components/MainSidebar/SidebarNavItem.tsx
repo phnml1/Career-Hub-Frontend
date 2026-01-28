@@ -42,14 +42,16 @@ export function SidebarNavItem({
       />
 
       {isExpanded && (
-        <>
-          <span className='ml-3 text-sm font-medium'>{name}</span>
-          {count && (
-            <span className='ml-auto bg-brand-500 text-white text-[10px] px-1.5 py-0.5 rounded-full'>
+        <div className='flex-1 flex justify-between items-center ml-3'>
+          <span className='whitespace-nowrap overflow-hidden text-sm font-medium'>
+            {name}
+          </span>
+          {count ? (
+            <span className='bg-red-500 text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full min-w-[18px] text-center'>
               {count}
             </span>
-          )}
-        </>
+          ) : null}
+        </div>
       )}
 
       {!isExpanded && count && (

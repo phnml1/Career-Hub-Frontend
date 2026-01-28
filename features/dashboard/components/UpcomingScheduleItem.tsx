@@ -1,81 +1,88 @@
 'use client';
 
-import { differenceInCalendarDays, format, parseISO } from 'date-fns';
-
 import { cn } from '@/shared/lib/utils';
 
 interface UpcomingScheduleItemProps {
   schedule: {
-    startedAt: string;
-    stageType: string;
+    id: number;
     companyName: string;
     scheduleName: string;
+    stageType: string;
+    displayDate: string; // 훅에서 가공됨
+    dDayValue: number; // 훅에서 가공됨
+    isUrgent: boolean; // 훅에서 가공됨
+    isToday: boolean; // 훅에서 가공됨
   };
-  onClick?: () => void;
 }
 
 export const UpcomingScheduleItem = ({
   schedule,
-  onClick,
 }: UpcomingScheduleItemProps) => {
-  const startDate = parseISO(schedule.startedAt);
-  const today = new Date();
-  const dDay = differenceInCalendarDays(startDate, today);
+  const {
+    companyName,
+    scheduleName,
+    stageType,
+    displayDate,
+    dDayValue,
+    isUrgent,
+    isToday,
+  } = schedule;
 
-  const timeString = format(startDate, 'aaa hh:mm');
+  const isInterview = stageType === 'INTERVIEW';
 
-  const isInterview = schedule.stageType === 'INTERVIEW';
+  // 전형 종류별 배지 스타일
   const badgeStyles = isInterview
-    ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30'
-    : 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30';
+    ? 'bg-orange-100 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400'
+    : 'bg-indigo-100 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400';
 
-  // 디데이 긴급도 스타일 (D-3 이내일 때 빨간색)
-  const isUrgent = dDay <= 3;
-  const dDayStyles = isUrgent
-    ? 'text-red-500 border-red-100 dark:border-red-900'
-    : 'text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-600';
+  // 디데이 배지 스타일 (오늘이거나 긴급할 때)
+  const dDayBadgeStyles = isToday
+    ? 'bg-brand-500 text-white border-brand-400'
+    : isUrgent
+      ? 'bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:border-red-900/50 dark:text-red-400'
+      : 'bg-white text-slate-600 border-slate-200 dark:bg-slate-700 dark:text-slate-300 dark:border-slate-600';
 
   return (
-    <div
-      onClick={onClick}
-      className='flex items-center space-x-4 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl cursor-pointer hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:ring-2 hover:ring-brand-100 dark:hover:ring-brand-900 transition-all group border border-transparent'
-    >
+    <div className='flex items-center gap-x-2 p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl cursor-pointer hover:bg-brand-50 dark:hover:bg-brand-900/20 hover:ring-2 hover:ring-brand-100 dark:hover:ring-brand-900 transition-all group border border-transparent'>
       {/* D-Day Badge */}
       <div
         className={cn(
-          'shrink-0 w-12 h-12 rounded-xl flex flex-col items-center justify-center font-extrabold shadow-sm bg-white dark:bg-slate-700 border',
-          dDayStyles
+          'shrink-0 w-14 h-14 rounded-xl flex items-center justify-center font-extrabold shadow-sm bg-white dark:bg-slate-700 border',
+          dDayBadgeStyles,
         )}
       >
-        <span className='text-[9px] font-bold opacity-80 leading-none mb-1'>
-          D-
-        </span>
-        <span className='text-base leading-none'>
-          {dDay === 0 ? 'Day' : dDay}
-        </span>
+        <div
+          className={cn(
+            'flex flex-col items-center justify-center leading-none',
+            isToday ? 'flex-col' : 'flex-row',
+          )}
+        >
+          <span className='text-sm font-bold opacity-80'>D-</span>
+          <span className={cn('font-black', isToday ? 'text-base' : 'text-xl')}>
+            {isToday ? 'DAY' : dDayValue}
+          </span>
+        </div>
       </div>
 
       {/* Info Section */}
-      <div className='flex-1 min-w-0'>
-        <div className='flex items-center justify-between mb-1'>
-          <h4 className='font-bold text-slate-900 dark:text-slate-100 truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors text-sm'>
-            {schedule.companyName}
-          </h4>
+      <div className='flex-1 flex flex-col gap-y-2'>
+        <div className='flex items-center justify-between'>
+          <span className='font-bold text-slate-900 dark:text-slate-100 truncate group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors text-sm'>
+            {companyName}
+          </span>
           <span
             className={cn(
-              'text-[10px] px-2 py-0.5 rounded-full font-bold whitespace-nowrap ml-2',
-              badgeStyles
+              'text-xs px-2 py-0.5 rounded-full font-bold whitespace-nowrap',
+              badgeStyles,
             )}
           >
             {isInterview ? '면접' : '기타'}
           </span>
         </div>
 
-        <div className='flex items-center text-xs text-slate-400 dark:text-slate-500'>
-          <span className='truncate mr-2 font-medium'>
-            {schedule.scheduleName}
-          </span>
-          <span className='shrink-0 font-bold'>• {timeString}</span>
+        <div className='flex items-center gap-x-2 text-xs text-slate-400 dark:text-slate-500'>
+          <span className='truncate font-extrabold'>{scheduleName}</span>
+          <span className='shrink-0 font-bold'>{displayDate}</span>
         </div>
       </div>
     </div>

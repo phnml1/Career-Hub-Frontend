@@ -2,7 +2,7 @@
 
 import { FormProvider, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { EditIcon, Loader2Icon, SaveIcon, UserIcon } from 'lucide-react';
+import { EditIcon, Loader2Icon, UserIcon } from 'lucide-react';
 
 import {
   ProfileFormValues,
@@ -91,7 +91,7 @@ export default function SettingsProfilePage() {
                   <InputGroup
                     className={cn(
                       'group transition-all duration-200',
-                      'focus-within:border-primary! focus-within:ring-4! focus-within:ring-brand-500/20!'
+                      'focus-within:border-primary! focus-within:ring-4! focus-within:ring-brand-500/20!',
                     )}
                   >
                     <InputGroupAddon>

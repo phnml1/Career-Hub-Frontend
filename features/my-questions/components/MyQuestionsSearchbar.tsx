@@ -1,20 +1,67 @@
 'use client';
 
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@/shared/components/ui/input-group';
 import { SearchIcon } from 'lucide-react';
-import { useState } from 'react';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function MyQuestionsSearchbar() {
-  const [search, setSearch] = useState('');
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const queryFromUrl = searchParams.get('query') || '';
+  const currentType = searchParams.get('type') || 'linked';
+  const isLinked = currentType === 'linked';
+
+  const [searchInputValue, setSearchInputValue] = useState(queryFromUrl);
+
+  useEffect(() => {
+    setSearchInputValue(queryFromUrl);
+  }, [queryFromUrl]);
+
+  const handleSearch = () => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (searchInputValue.trim()) {
+      params.set('query', searchInputValue.trim());
+    } else {
+      params.delete('query'); // 빈 값일 경우 쿼리 파라미터 삭제
+    }
+
+    // scroll: false로 검색 시 화면 튀기 방지
+    router.push(`${pathname}?${params.toString()}`, { scroll: false });
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const placeholder = isLinked
+    ? '연동된 회사명, 질문 내용을 검색해 보세요'
+    : '일반 질문 내용을 검색해 보세요';
 
   return (
-    <div className='mb-6 relative'>
-      <SearchIcon className='absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400' />
-      <input
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className='w-full pl-9 pr-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:ring-2 focus:ring-brand-500 outline-none dark:text-slate-100'
-        placeholder='회사명으로 검색...'
+    <InputGroup className='h-12 bg-white mb-6'>
+      <InputGroupAddon>
+        <SearchIcon className='stroke-3' />
+      </InputGroupAddon>
+      <InputGroupInput
+        value={searchInputValue}
+        onChange={(e) => setSearchInputValue(e.target.value)}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
       />
-    </div>
+      <InputGroupAddon align='inline-end'>
+        <InputGroupButton onClick={handleSearch}>검색하기</InputGroupButton>
+      </InputGroupAddon>
+    </InputGroup>
   );
 }

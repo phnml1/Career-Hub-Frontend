@@ -9,7 +9,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { Notification, NotificationType } from '../types/notification';
+import { Notification, NotificationType } from '../types';
 import { useReadNotification } from '../hooks/useReadNotification';
 import { useDeleteNotification } from '../hooks/useDeleteNotification';
 import { formatDateTime } from '@/shared/lib/utils';
@@ -40,7 +40,7 @@ export default function NotificationItem({
     if (!is_read) {
       readNotification(notificationId);
     }
-    router.push(`/application_detail/${targetId}`);
+    router.push(`/applications/${targetId}`);
   };
 
   const handleDelete = (e: React.MouseEvent) => {
@@ -61,24 +61,29 @@ export default function NotificationItem({
 
       <div className="flex-1 min-w-0">
         <div className="flex justify-between items-start">
-          <h3 className="text-base font-bold mb-1 truncate pr-4 text-slate-900 dark:text-slate-100">
+          <h3 className="text-base font-bold mb-1 truncate sm:pr-4 text-slate-900 dark:text-slate-100">
             {title}
             {!is_read && (
               <span className="ml-2 inline-block w-2 h-2 rounded-full bg-red-500 align-middle" />
             )}
           </h3>
-          <span className="text-xs text-slate-400 whitespace-nowrap flex-shrink-0">
+          {/* 데스크톱: 오른쪽에 날짜 표시 */}
+          <span className="hidden sm:block text-xs text-slate-400 whitespace-nowrap flex-shrink-0">
             {formatDateTime(createdAt)}
           </span>
         </div>
         <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
           {message}
         </p>
+        {/* 모바일: 아래에 날짜 표시 */}
+        <span className="sm:hidden text-xs text-slate-400 mt-2 block">
+          {formatDateTime(createdAt)}
+        </span>
       </div>
 
       <button
         onClick={handleDelete}
-        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors opacity-0 group-hover:opacity-100 self-center"
+        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors opacity-100 md:opacity-0 group-hover:opacity-100 self-center"
         title="삭제"
       >
         <Trash2 className="w-5 h-5" />
