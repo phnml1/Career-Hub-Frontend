@@ -25,7 +25,7 @@ export function Toolbar({
   const title = getTitleNode(view, date);
 
   return (
-    <div className='flex flex-col gap-y-2 p-4 md:flex-row md:items-center md:justify-between bg-white min-h-[68px] md:h-[68px] border-b border-border'>
+    <div className='flex flex-col gap-y-2 p-4 md:flex-row md:items-center md:justify-between bg-white dark:bg-slate-900 min-h-17 md:h-17 border-b border-border'>
       <div className='flex justify-between items-center gap-x-4'>
         <ButtonGroup className='items-center'>
           <Button variant='outline' onClick={() => onNavigate('PREV')}>
@@ -53,7 +53,7 @@ export function Toolbar({
             onClick={() => onView('month')}
             className={cn(
               'font-extrabold',
-              view === 'month' ? 'bg-accent' : ''
+              view === 'month' ? 'bg-accent' : '',
             )}
           >
             월

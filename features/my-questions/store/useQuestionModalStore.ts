@@ -1,16 +1,13 @@
 import { create } from 'zustand';
-
-import { QuestionFormValues } from '../schemas/question-form';
+import { Question } from '../types';
 
 interface QuestionModalState {
   isOpen: boolean;
-  mode: 'create' | 'edit' | 'archive';
-  selectedQuestion: QuestionFormValues | null;
+  mode: 'create' | 'edit';
+  selectedQuestion: Question | null;
 
   openCreateModal: () => void;
-  openEditModal: (question: QuestionFormValues) => void;
-  // 커뮤니티에서 면접 질문 저장시 쓰는 액션
-  openArchiveModal: (data: QuestionFormValues) => void;
+  openEditModal: (question: Question) => void;
   closeModal: () => void;
 }
 
@@ -31,13 +28,6 @@ export const useQuestionModalStore = create<QuestionModalState>((set) => ({
       isOpen: true,
       mode: 'edit',
       selectedQuestion: question,
-    }),
-
-  openArchiveModal: (data) =>
-    set({
-      isOpen: true,
-      mode: 'archive',
-      selectedQuestion: data,
     }),
 
   closeModal: () =>

@@ -1,5 +1,21 @@
 import { clientApi } from '@/shared/lib/api/clientApi';
-import { GetQuestionsResponse } from '../types';
+
+export interface GetQuestionListItemResponse {
+  questionArchiveId: number;
+  interviewQuestionId: number;
+  applicationId: number | null;
+  company: string;
+  interviewType: string;
+  question: string;
+  memo: string;
+  createdAt: string;
+}
+
+export interface GetQuestionListResponse {
+  contents: GetQuestionListItemResponse[];
+  hasNext: boolean;
+  nextCursorId: number | null;
+}
 
 interface GetQuestionsParams {
   linkStatus?: 'LINKED' | 'UNLINKED';
@@ -20,7 +36,7 @@ export const getQuestions = async ({
   lastCursorId,
   size = 20,
   query,
-}: GetQuestionsParams): Promise<GetQuestionsResponse> => {
+}: GetQuestionsParams): Promise<GetQuestionListResponse> => {
   const params = new URLSearchParams({
     linkStatus,
     size: String(size),
@@ -28,7 +44,7 @@ export const getQuestions = async ({
     ...(query && { query }),
   });
 
-  return clientApi.get<GetQuestionsResponse>(
+  return clientApi.get<GetQuestionListResponse>(
     `/v1/archive/questions?${params.toString()}`,
   );
 };

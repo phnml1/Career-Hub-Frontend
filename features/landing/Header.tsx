@@ -12,7 +12,6 @@ export default function Header() {
           <Image src={Logo} alt='CareerHub Logo' className='h-12 w-auto' />
         </Link>
 
-        {/* Auth Buttons */}
         <div className='flex items-center gap-4'>
           <Button
             asChild

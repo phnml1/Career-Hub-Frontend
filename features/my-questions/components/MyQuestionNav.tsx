@@ -2,35 +2,58 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Tabs, TabsList, TabsTrigger } from '@/shared/components/ui/tabs';
-import { Link2, Link2Off } from 'lucide-react';
+
+import { cn } from '@/shared/lib/utils';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/shared/components/ui/tooltip';
+import { NAV_ITEMS } from '../constants';
 
 export default function MyQuestionsNav() {
   const searchParams = useSearchParams();
-  const currentType = searchParams.get('type') || 'linked'; // 기본값 '연동'
+  const currentType = searchParams.get('type') || 'linked';
 
   return (
-    <Tabs value={currentType} className='w-full mb-6'>
-      <TabsList className='flex flex-col md:flex-row p-1.5 bg-slate-100 dark:bg-slate-800 rounded-2xl border border-slate-200 dark:border-slate-700 h-auto'>
-        <Link href='?type=linked' className='flex-1 md:flex-none'>
-          <TabsTrigger
-            value='linked'
-            className='w-full px-8 py-3 rounded-xl text-sm font-black transition-all flex items-center justify-center gap-2.5 data-[state=active]:bg-white data-[state=active]:text-brand-600 data-[state=active]:shadow-lg dark:data-[state=active]:bg-slate-700'
-          >
-            <Link2 className='w-4 h-4' /> 지원 관리와 연동된 면접 질문
-          </TabsTrigger>
-        </Link>
+    <nav className='w-full mb-8' aria-label='질문 유형 선택'>
+      <div className='flex flex-col sm:flex-row p-1.5 bg-slate-100/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-2xl border border-slate-200 dark:border-slate-700 gap-1.5'>
+        {NAV_ITEMS.map((item) => {
+          const isActive = currentType === item.id;
+          const Icon = item.icon;
 
-        <Link href='?type=unlinked' className='flex-1 md:flex-none'>
-          <TabsTrigger
-            value='unlinked'
-            className='w-full px-8 py-3 rounded-xl text-sm font-black transition-all flex items-center justify-center gap-2.5 data-[state=active]:bg-white data-[state=active]:text-brand-600 data-[state=active]:shadow-lg dark:data-[state=active]:bg-slate-700 text-slate-500'
-          >
-            <Link2Off className='w-4 h-4' /> 일반 질문 (지원 관리와 연동되지
-            않은 면접 질문)
-          </TabsTrigger>
-        </Link>
-      </TabsList>
-    </Tabs>
+          return (
+            <Tooltip key={item.id} delayDuration={300}>
+              <TooltipTrigger asChild>
+                <Link
+                  href={`?type=${item.id}`}
+                  replace // 뒤로가기 스택이 쌓이는 걸 방지 (탭 전환시 권장)
+                  className={cn(
+                    'flex-1 flex items-center justify-center gap-2.5 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200',
+                    isActive
+                      ? 'bg-white dark:bg-slate-700 text-brand-600 dark:text-brand-400 shadow-sm ring-1 ring-slate-200/50 dark:ring-slate-600'
+                      : 'text-slate-500 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 hover:text-slate-700 dark:hover:text-slate-300',
+                  )}
+                >
+                  <Icon
+                    className={cn(
+                      'w-4 h-4',
+                      isActive ? 'animate-in zoom-in-90' : '',
+                    )}
+                  />
+                  <span>{item.label}</span>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='bottom'
+                className='px-3 py-1.5 text-xs font-medium bg-slate-900 dark:bg-slate-100 text-slate-50 dark:text-slate-900 rounded-lg shadow-xl'
+              >
+                {item.description}
+              </TooltipContent>
+            </Tooltip>
+          );
+        })}
+      </div>
+    </nav>
   );
 }

@@ -3,6 +3,7 @@ import { clientApi } from '@/shared/lib/api/clientApi';
 export interface GetReviewQuestionResponse {
   questionId: number;
   question: string;
+  isSaved: boolean;
 }
 
 export interface GetReviewDetailResponse {
@@ -24,8 +25,6 @@ export interface GetReviewDetailResponse {
 export const getReviewDetail = async (
   reviewId: number,
 ): Promise<GetReviewDetailResponse> => {
-  // throw new Error('API 호출 실패 테스트!');
-
   return clientApi.get<GetReviewDetailResponse>(
     `/v1/reviews/${reviewId.toString()}`,
   );

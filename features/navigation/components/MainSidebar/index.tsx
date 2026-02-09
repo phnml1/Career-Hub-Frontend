@@ -36,7 +36,7 @@ export default function MainSidebar() {
             router.push('/applications/new');
           }}
           className={cn(
-            'w-full rounded-3xl shadow-md shadow-brand-200 font-extrabold',
+            'w-full rounded-3xl font-extrabold',
             'hover:-translate-y-0.5 transition-all',
             !isExpanded && 'p-0 size-10 rounded-full',
             isExpanded && 'py-5',

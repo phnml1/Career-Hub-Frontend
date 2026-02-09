@@ -6,7 +6,7 @@ interface RelativeTimeProps {
   className?: string;
 }
 
-export const RelativeTime = ({ date, className }: RelativeTimeProps) => {
+export default function RelativeTime({ date, className }: RelativeTimeProps) {
   const d = typeof date === 'string' ? new Date(date) : date;
 
   return (
@@ -17,4 +17,4 @@ export const RelativeTime = ({ date, className }: RelativeTimeProps) => {
       })}
     </time>
   );
-};
+}

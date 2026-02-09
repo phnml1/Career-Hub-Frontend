@@ -8,6 +8,7 @@ import { getDay } from 'date-fns/getDay';
 import { ko } from 'date-fns/locale/ko';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import './calendar.css';
+import './dark-calendar.css';
 import { Toolbar } from './Toolbar';
 import { useDateScheduleListStore } from '../../stores/useDateScheduleListStore';
 import { WeekViewHeader } from './WeekViewHeader';
@@ -58,7 +59,7 @@ export default function RbcCalendarWrapper({
 
   return (
     <Calendar
-      className='h-full w-full'
+      className='h-full w-full rbc-calendar'
       view={view}
       views={{
         month: true,

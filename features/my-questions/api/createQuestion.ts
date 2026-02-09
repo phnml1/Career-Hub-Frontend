@@ -4,10 +4,9 @@ export interface CreateQuestionPayload {
   /**
    * 지원 관리 연동 시 필수
    */
-  applicationId?: number | null;
-  interviewQuestionId?: number | null; // 커뮤니티 질문 저장 시 필수
-  interviewType?: string; // 면접 종류 (선택)
-  question: string; // 질문 내용 (직접 작성 시 필수)
+  applicationId: number | null;
+  interviewType: string;
+  question: string;
   memo?: string; // 나의 답변 메모 (선택)
 }
 

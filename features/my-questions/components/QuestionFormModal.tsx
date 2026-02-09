@@ -14,8 +14,6 @@ import QuestionForm from './QuestionForm';
 export default function QuestionFormModal() {
   const { isOpen, closeModal, mode } = useQuestionModalStore();
 
-  if (!isOpen) return null;
-
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && closeModal()}>
       <DialogContent className='sm:max-w-md'>

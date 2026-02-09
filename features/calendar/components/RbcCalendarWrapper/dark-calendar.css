@@ -1,0 +1,27 @@
+@reference 'tailwindcss';
+
+.dark {
+  .rbc-row.rbc-month-header {
+    background-color: var(--color-slate-950);
+  }
+
+  .rbc-row.rbc-time-header-cell {
+    background-color: var(--color-slate-950);
+
+    .rbc-header {
+      border-color: var(--color-slate-800);
+    }
+
+    .rbc-header + .rbc-header {
+      border-color: var(--color-slate-800);
+    }
+  }
+
+  .rbc-time-header.rbc-overflowing {
+    border-color: var(--color-slate-800);
+
+    .rbc-time-header-content {
+      border-color: var(--color-slate-800);
+    }
+  }
+}

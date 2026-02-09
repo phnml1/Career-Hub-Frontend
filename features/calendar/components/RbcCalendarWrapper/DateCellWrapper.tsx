@@ -7,20 +7,16 @@ export default function DateCellWrapper({
   value,
   range,
 }: DateCellWrapperProps) {
-  // 예: 오늘 날짜인지 확인
-  const isToday = new Date().toDateString() === value.toDateString();
-
   const isFirstColumn =
     range && range[0].toDateString() === value.toDateString();
 
   return (
     <div
       className={cn(
-        'relative h-full w-full transition-colors group',
+        'relative h-full w-full transition-colors group bg-white dark:bg-slate-900',
+        'hover:bg-slate-50 dark:hover:bg-slate-800/30 cursor-pointer',
         // 첫 번째 열이 아닐 때만 왼쪽 보더 추가
         !isFirstColumn && 'border-l border-border',
-        isToday ? 'bg-brand-50/50' : 'bg-white',
-        'hover:bg-brand-50/30 cursor-pointer',
       )}
     >
       {/* 캘린더가 기본적으로 제공하는 내부 요소(이벤트 등)를 렌더링하기 위해 children이 반드시 필요합니다. */}

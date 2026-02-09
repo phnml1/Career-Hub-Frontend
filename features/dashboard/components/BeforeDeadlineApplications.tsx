@@ -1,31 +1,29 @@
 'use client';
 
-import { BriefcaseIcon, ChevronRightIcon } from 'lucide-react';
+import { BriefcaseIcon } from 'lucide-react';
 
-import { Button } from '@/shared/components/ui/button';
 import { useGetBeforeDeadlineApplications } from '../hooks/useGetBeforeDeadlineApplications';
 import ClosingApplicationItem from './BeforeDeadlineApplicationItem';
 
 export default function BeforeDeadlineApplications() {
   const { data } = useGetBeforeDeadlineApplications();
-
   const applications = data.contents ?? [];
   const isEmpty = applications.length === 0;
 
   return (
-    <div className='space-y-4 bg-white dark:bg-slate-900 p-8 rounded-3xl border border-border'>
+    <div className='space-y-4 bg-card text-card-foreground p-8 rounded-3xl border border-border'>
       <div className='flex items-center justify-between'>
         <div className='text-xl font-bold text-slate-900 dark:text-slate-100 flex items-center gap-x-2'>
           <BriefcaseIcon className='stroke-2 w-5 h-5 text-brand-500' />
           <span>곧 마감되는 서류 전형</span>
         </div>
-        <Button
+        {/* <Button
           variant='link'
           size='lg'
           className='text-sm font-bold text-brand-500 hover:text-brand-600 flex items-center transition-colors'
         >
           더보기 <ChevronRightIcon className='w-4 h-4 stroke-2' />
-        </Button>
+        </Button> */}
       </div>
 
       <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>

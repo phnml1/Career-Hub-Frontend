@@ -2,7 +2,7 @@
 
 import { Trash2 } from 'lucide-react';
 import { Notification } from '../../types';
-import { RelativeTime } from '@/shared/components/RelativeTime';
+import RelativeTime from '@/shared/components/RelativeTime';
 import { getNotificationIcon } from './notificationIcon';
 
 interface NotificationPopoverItemProps {
@@ -36,7 +36,7 @@ export default function NotificationPopoverItem({
           : 'bg-brand-50/10 dark:bg-brand-900/10'
       }`}
     >
-      <div className='mt-0.5 flex-shrink-0'>
+      <div className='mt-0.5 shrink-0'>
         {getNotificationIcon(notification.type)}
       </div>
       <div className='flex-1 min-w-0'>

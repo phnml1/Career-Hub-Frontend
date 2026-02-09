@@ -1,9 +1,9 @@
 import { clientApi } from '@/shared/lib/api/clientApi';
 
 export interface UpdateQuestionPayload {
-  applicationId?: number | null; // 지원서 연동 변경 (null일 경우 연동 해제)
-  interviewType?: string; // 면접 유형 수정
-  question?: string; // 질문 내용 수정
+  applicationId: number | null; // 지원서 연동 변경 (null일 경우 연동 해제)
+  interviewType: string; // 면접 유형 수정
+  question: string; // 질문 내용 수정
   memo?: string; // 답변 메모 수정
 }
 
@@ -16,6 +16,5 @@ export const updateQuestion = async (
   questionArchiveId: number,
   payload: UpdateQuestionPayload,
 ) => {
-  // 204 No Content 응답
   return clientApi.patch(`/v1/archive/questions/${questionArchiveId}`, payload);
 };

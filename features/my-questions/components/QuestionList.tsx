@@ -6,10 +6,9 @@ import { Loader2Icon } from 'lucide-react';
 import { useInView } from '@/shared/hooks/useInView';
 import { useGetQuestions } from '../hooks/useGetQuestions';
 
-import LinkedQuestionItem from './LinkedQuestionItem';
-import UnlinkedQuestionItem from './UnlinkedQuestionItem';
 import QuestionListEmptyState from './QuestionListEmptyState';
 import { useSearchParamsBasedRoute } from '@/shared/hooks/useSearchParamsBasedRoute';
+import QuestionListItem from './QuestionListItem';
 
 export default function QuestionList() {
   const { getSearchParam, updateRoute } = useSearchParamsBasedRoute();
@@ -20,6 +19,8 @@ export default function QuestionList() {
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetQuestions({ linkStatus, query });
+  const questions = data.pages.flatMap((page) => page.contents) || [];
+  const isEmpty = questions.length === 0;
 
   const { ref, inView } = useInView({
     threshold: 0.1,
@@ -32,9 +33,7 @@ export default function QuestionList() {
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  const questions = data?.pages.flatMap((page) => page.contents) || [];
-
-  if (questions.length === 0) {
+  if (isEmpty) {
     return (
       <QuestionListEmptyState
         query={query}
@@ -44,22 +43,14 @@ export default function QuestionList() {
   }
 
   return (
-    <div className='space-y-4'>
-      {questions.map((question) =>
-        linkStatus === 'LINKED' ? (
-          <LinkedQuestionItem
-            key={question.questionArchiveId}
-            question={question}
-          />
-        ) : (
-          <UnlinkedQuestionItem
-            key={question.questionArchiveId}
-            question={question}
-          />
-        ),
-      )}
+    <div className='grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-8'>
+      {questions.map((question) => (
+        <QuestionListItem
+          key={question.questionArchiveId}
+          question={question}
+        />
+      ))}
 
-      {/* 무한 스크롤 트리거 요소 */}
       {hasNextPage && (
         <div ref={ref} className='h-10 flex justify-center items-center'>
           {isFetchingNextPage && (

@@ -38,7 +38,7 @@ export default function StatusPieChart() {
   ];
 
   return (
-    <div className='bg-white dark:bg-slate-900 p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors'>
+    <div className='bg-card p-8 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-800 transition-colors'>
       <div className='flex gap-x-2 items-center'>
         <PieChartIcon className='w-5 h-5 text-brand-500' />
         <div className='font-bold text-slate-900 dark:text-slate-100 text-xl'>

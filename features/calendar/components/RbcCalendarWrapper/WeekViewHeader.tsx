@@ -16,17 +16,22 @@ export function WeekViewHeader({ date, localizer }: WeekViewHeaderProps) {
   return (
     <div className='flex flex-col gap-1 items-center'>
       {/* 요일 */}
-      <span className='text-xs text-slate-500'>{weekday}</span>
+      <span className='text-xs font-black uppercase mb-1 text-slate-400'>
+        {weekday}
+      </span>
 
       {/* 날짜 */}
-      <div
+      <span
         className={cn(
-          today &&
-            'flex items-center justify-center bg-primary text-primary-foreground rounded-full w-6 h-6',
+          'inline-flex items-center justify-center w-7 h-7 rounded-full',
+          'text-lg font-black transition-colors',
+          today
+            ? 'bg-primary text-primary-foreground shadow-primary'
+            : 'text-slate-900 dark:text-slate-100',
         )}
       >
-        <span className={'text-sm font-bold cursor-pointer'}>{day}</span>
-      </div>
+        {day}
+      </span>
     </div>
   );
 }

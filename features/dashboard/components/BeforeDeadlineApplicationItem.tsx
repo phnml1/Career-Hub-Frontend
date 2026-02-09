@@ -46,7 +46,7 @@ export default function BeforeDeadlineApplicationItem({
 
   return (
     <Link href={`/applications/${applicationId}`} className='block'>
-      <div className='relative rounded-2xl p-6 border bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group flex flex-col justify-between min-h-[220px]'>
+      <div className='relative rounded-2xl p-6 border bg-white dark:bg-slate-950/50 border-slate-200 dark:border-slate-800 hover:border-brand-300 dark:hover:border-brand-700 shadow-sm hover:shadow-md transition-all duration-200 cursor-pointer group flex flex-col justify-between min-h-[220px]'>
         <div className='flex flex-col h-full'>
           {/* 헤더: 회사명, 직무, 상태 태그 */}
           <div className='flex justify-between items-start mb-5'>

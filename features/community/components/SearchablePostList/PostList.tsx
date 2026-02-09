@@ -18,6 +18,8 @@ export default function PostList({ query, sort }: Props) {
   const { updateRoute } = useSearchParamsBasedRoute();
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useGetReviews({ query, sort });
+  const posts = data.pages.flatMap((page) => page.posts);
+  const isEmpty = posts.length === 0;
 
   const { ref, inView } = useInView();
 
@@ -26,8 +28,6 @@ export default function PostList({ query, sort }: Props) {
       fetchNextPage();
     }
   }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const isEmpty = data?.pages[0].posts.length === 0;
 
   if (isEmpty) {
     return (
@@ -44,15 +44,10 @@ export default function PostList({ query, sort }: Props) {
 
   return (
     <div className='grid grid-cols-1 gap-6'>
-      {data?.pages.map((page, i) => (
-        <div key={i} className='contents'>
-          {page.posts.map((post) => (
-            <PostListItem key={post.id} post={post} />
-          ))}
-        </div>
+      {posts.map((post) => (
+        <PostListItem key={post.id} post={post} />
       ))}
 
-      {/* 무한 스크롤 트리거 영역 */}
       {hasNextPage && <div ref={ref} className='h-10' />}
     </div>
   );

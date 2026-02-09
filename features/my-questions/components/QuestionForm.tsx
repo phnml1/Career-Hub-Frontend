@@ -17,11 +17,7 @@ import { Textarea } from '@/shared/components/ui/textarea';
 import { Button } from '@/shared/components/ui/button';
 import ButtonLoader from '@/shared/components/ButtonLoader';
 
-interface QuestionFormProps {
-  onSuccess?: () => void;
-}
-
-export default function QuestionForm({ onSuccess }: QuestionFormProps) {
+export default function QuestionForm() {
   const { closeModal, mode, selectedQuestion } = useQuestionModalStore();
   const { mutate: createMutate, isPending: isCreating } = useCreateQuestion();
   const { mutate: updateMutate, isPending: isUpdating } = useUpdateQuestion();
@@ -29,56 +25,37 @@ export default function QuestionForm({ onSuccess }: QuestionFormProps) {
   const methods = useForm<QuestionFormValues>({
     resolver: zodResolver(questionFormSchema),
     values: {
-      questionArchiveId: selectedQuestion?.questionArchiveId,
+      isLinked: !!selectedQuestion?.applicationId,
       applicationId: selectedQuestion?.applicationId ?? null,
-      interviewQuestionId: selectedQuestion?.interviewQuestionId ?? null,
       interviewType: selectedQuestion?.interviewType ?? '',
       question: selectedQuestion?.question ?? '',
       memo: selectedQuestion?.memo ?? '',
-    },
+    } as QuestionFormValues,
   });
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    setValue,
-    formState: { errors },
-  } = methods;
-
-  const applicationId = watch('applicationId');
-  const isLinked = applicationId !== null;
+  const isLinked = methods.watch('isLinked');
 
   const onSubmit = (data: QuestionFormValues) => {
-    const { questionArchiveId, ...payload } = data;
+    // 1. UI 전용 필드 분리
+    const { isLinked, ...rest } = data;
 
-    console.log('🚀 ~ onSubmit ~ payload:', payload);
-    if (!payload.memo || payload.memo.trim() === '') {
-      delete payload.memo;
-    }
+    // 2. 서버 전송용 페이로드 가공
+    // data.isLinked가 true이면 data.applicationId는 number(혹은 검증 통과한 상태)입니다.
+    const payload = {
+      ...rest,
+      applicationId: data.isLinked ? data.applicationId! : null,
+      memo: rest.memo?.trim() || undefined,
+    };
 
-    if (mode === 'create' || mode === 'archive') {
-      createMutate(payload, {
-        onSuccess: () => {
-          onSuccess?.();
-          closeModal();
-        },
-      });
-    } else {
-      if (!questionArchiveId) return;
+    const targetId = selectedQuestion?.questionArchiveId;
 
+    if (mode === 'edit' && targetId) {
       updateMutate(
-        {
-          id: questionArchiveId,
-          payload: payload,
-        },
-        {
-          onSuccess: () => {
-            onSuccess?.();
-            closeModal();
-          },
-        },
+        { id: targetId, payload: payload }, // mutate 정의에 따라 as any 혹은 타입 매핑
+        { onSuccess: closeModal },
       );
+    } else {
+      createMutate(payload, { onSuccess: closeModal });
     }
   };
 
@@ -86,15 +63,18 @@ export default function QuestionForm({ onSuccess }: QuestionFormProps) {
 
   return (
     <FormProvider {...methods}>
-      <form
-        onSubmit={handleSubmit(onSubmit, (errors) =>
-          console.log('검증 실패 원인:', errors),
-        )}
-        className='space-y-6'
-      >
+      <form onSubmit={methods.handleSubmit(onSubmit)} className='space-y-6'>
         <LinkToggle
           isOn={isLinked}
-          onToggle={(checked) => setValue('applicationId', checked ? 0 : null)}
+          onToggle={(checked) => {
+            if (checked) {
+              methods.setValue('isLinked', true);
+              methods.setValue('applicationId', undefined);
+            } else {
+              methods.setValue('isLinked', false);
+              methods.setValue('applicationId', null);
+            }
+          }}
         />
 
         {!isLinked && (
@@ -127,11 +107,13 @@ export default function QuestionForm({ onSuccess }: QuestionFormProps) {
           <Textarea
             id='question'
             required
-            {...register('question')}
+            {...methods.register('question')}
             className='w-full p-3 border rounded-xl bg-slate-50 dark:bg-slate-800 h-20'
           />
-          {errors.question && (
-            <p className='text-xs text-red-500'>{errors.question.message}</p>
+          {methods.formState.errors.question && (
+            <p className='text-xs text-red-500'>
+              {methods.formState.errors.question.message}
+            </p>
           )}
         </div>
 
@@ -144,11 +126,13 @@ export default function QuestionForm({ onSuccess }: QuestionFormProps) {
           </Label>
           <Textarea
             id='memo'
-            {...register('memo')}
+            {...methods.register('memo')}
             className='w-full p-3 border rounded-xl bg-slate-50 dark:bg-slate-800 h-20'
           />
-          {errors.memo && (
-            <p className='text-xs text-red-500'>{errors.memo.message}</p>
+          {methods.formState.errors.memo && (
+            <p className='text-xs text-red-500'>
+              {methods.formState.errors.memo.message}
+            </p>
           )}
         </div>
 
@@ -163,7 +147,6 @@ export default function QuestionForm({ onSuccess }: QuestionFormProps) {
             <XIcon className='size-4' />
             {mode === 'create' && '면접 질문 추가 취소하기'}
             {mode === 'edit' && '면접 질문 수정 취소하기'}
-            {mode === 'archive' && '나의 질문으로 보관 취소하기'}
           </Button>
           <Button
             type='submit'
@@ -176,14 +159,12 @@ export default function QuestionForm({ onSuccess }: QuestionFormProps) {
                 <ButtonLoader />
                 {mode === 'create' && '면접 질문 추가중..'}
                 {mode === 'edit' && '면접 질문 수정중..'}
-                {mode === 'archive' && '나의 질문으로 보관중..'}
               </>
             ) : (
               <>
                 <BookMarkedIcon className='size-4' />
                 {mode === 'create' && '면접 질문 추가하기'}
                 {mode === 'edit' && '면접 질문 수정 완료'}
-                {mode === 'archive' && '나의 질문으로 보관하기'}
               </>
             )}
           </Button>

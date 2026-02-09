@@ -13,7 +13,7 @@ export const SidebarLogo = ({ isExpanded }: { isExpanded: boolean }) => (
         alt='logo'
         priority
         className={cn(
-          'object-contain transition-all duration-300',
+          'object-contain transition-all duration-300 dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]',
           isExpanded ? 'w-32' : 'w-12',
         )}
       />

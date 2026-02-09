@@ -41,17 +41,14 @@ export default function ApplicationSummaryCards() {
   return (
     <div className='grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-5'>
       {statItems.map((stat, idx) => (
-        <div
-          key={idx}
-          className='bg-white dark:bg-slate-900 p-6 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 ...'
-        >
-          <span className='text-xs font-bold text-slate-400 uppercase tracking-wider'>
+        <div key={idx} className='bg-card p-6 rounded-2xl border border-border'>
+          <span className='text-base font-bold dark:text-slate-200 uppercase tracking-wider'>
             {stat.label}
           </span>
           <div className='flex items-baseline justify-between mt-3'>
             <span className='text-3xl font-extrabold'>{stat.value}</span>
             <span
-              className={`px-2 py-0.5 rounded-md text-[10px] font-bold ${stat.color}`}
+              className={`px-2 py-0.5 rounded-md text-xs font-bold ${stat.color}`}
             >
               CASE
             </span>

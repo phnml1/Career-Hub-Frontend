@@ -4,7 +4,7 @@ import CalendarContainer from '@/features/calendar/components/CalendarContainer'
 import CalendarFilterPanelWrapper from '@/features/calendar/components/FilterPanel/CalendarFilterPanelWrapper';
 import CalendarLoader from '@/features/calendar/components/CalendarLoader';
 import DateScheduleCreateModal from '@/features/calendar/components/ScheduleCreateModal';
-import DateScheduleListModal from '@/features/calendar/components/DateScheduleListModal';
+import DailyApplicationModal from '@/features/calendar/components/DailyApplicationModal';
 
 export default function CalendarPage() {
   return (
@@ -22,7 +22,7 @@ export default function CalendarPage() {
         <CalendarFilterPanelWrapper />
       </div>
 
-      <DateScheduleListModal />
+      <DailyApplicationModal />
       <DateScheduleCreateModal />
     </>
   );

@@ -13,11 +13,11 @@ export const useGetReviewDetail = (reviewId: number) => {
       id: data.reviewId,
       companyName: data.company,
       detailReviewContent: data.content ?? '',
-      // 질문 리스트 매핑
+
       questions: data.interviewQuestions.map((question) => ({
         id: question.questionId,
         content: question.question,
-        isSaved: Math.random() > 0.5,
+        isSaved: question.isSaved,
       })),
       authorName: data.author,
       isMyPost: !!data.isAuthor,

@@ -1,26 +1,38 @@
 import { cn } from '@/shared/lib/utils';
-import { format, isToday } from 'date-fns';
-import { ko } from 'date-fns/locale';
+import { isToday } from 'date-fns';
 
-export default function DayViewHeader({ date }: { date: Date }) {
+import { DateLocalizer } from 'react-big-calendar';
+
+interface DayViewHeaderProps {
+  date: Date;
+  localizer: DateLocalizer;
+}
+
+export default function DayViewHeader({ date, localizer }: DayViewHeaderProps) {
+  const day = localizer.format(date, 'd');
+  const weekday = localizer.format(date, 'EEE');
+
   const today = isToday(date);
 
   return (
     <div className='flex flex-col items-center py-2 h-[63px]'>
-      <span className='text-xs text-slate-500'>
-        {format(date, 'EEE', { locale: ko })}
+      {/* 요일 */}
+      <span className='text-xs font-black uppercase mb-1 text-slate-400'>
+        {weekday}
       </span>
 
-      <div
+      {/* 날짜 */}
+      <span
         className={cn(
-          today &&
-            'flex items-center justify-center bg-primary text-primary-foreground rounded-full w-6 h-6'
+          'inline-flex items-center justify-center w-7 h-7 rounded-full',
+          'text-lg font-black transition-colors',
+          today
+            ? 'bg-primary text-primary-foreground shadow-primary'
+            : 'text-slate-900 dark:text-slate-100',
         )}
       >
-        <span className='text-sm font-bold cursor-pointer'>
-          {format(date, 'd', { locale: ko })}
-        </span>
-      </div>
+        {day}
+      </span>
     </div>
   );
 }
