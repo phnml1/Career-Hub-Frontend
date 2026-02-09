@@ -84,7 +84,7 @@ export async function getFCMToken(): Promise<string | null> {
   }
 }
 
-// 포그라운드 메시지 리스너 설정 (BroadcastChannel로 모든 창에 전파)
+// 포그라운드 메시지 리스너 설정
 export function setupForegroundMessageListener(
   callback: (payload: {
     notification?: { title?: string; body?: string };
@@ -96,37 +96,12 @@ export function setupForegroundMessageListener(
     return null;
   }
 
-  const processedMessageIds = new Set<string>();
-  const channel = new BroadcastChannel('fcm-notifications');
-
-  // Firebase onMessage: 하나의 창에서만 수신됨
-  const unsubscribeOnMessage = onMessage(messaging, (payload) => {
-    const messageId = payload.messageId || `${Date.now()}`;
-    processedMessageIds.add(messageId);
+  const unsubscribe = onMessage(messaging, (payload) => {
+    console.log('[FCM] 포그라운드 메시지 수신:', payload);
     callback(payload);
-
-    // 다른 창에 전파
-    channel.postMessage({ ...payload, messageId });
   });
 
-  // BroadcastChannel: 다른 창에서 전파된 메시지 수신
-  channel.onmessage = (event) => {
-    const payload = event.data;
-    const messageId = payload.messageId || '';
-
-    // 이미 onMessage로 처리한 메시지는 무시
-    if (processedMessageIds.has(messageId)) {
-      processedMessageIds.delete(messageId);
-      return;
-    }
-
-    callback(payload);
-  };
-
-  return () => {
-    unsubscribeOnMessage();
-    channel.close();
-  };
+  return unsubscribe;
 }
 
 export { getToken, onMessage };
